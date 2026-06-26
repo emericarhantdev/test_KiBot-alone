@@ -1,0 +1,41 @@
+name: test actions
+
+on: push
+
+jobs:
+  my-job:
+    name: My Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+    
+      - name: Run KiCad actions
+        uses: actions-for-kicad/kicad-actions@v2-k10.0
+        with:
+          schematic_file_name: ./test_KiBot-alone.kicad_sch
+          run_erc: true
+          schematic_output_pdf: true
+    
+          pcb_file_name: ./test_KiBot-alone.kicad_pcb
+          run_drc: true
+          pcb_output_gerbers_and_drill: true
+          pcb_output_image: true
+    
+      - name: Upload schematic
+        uses: actions/upload-artifact@v7
+        with:
+          path: ./schematic.pdf
+          archive: false
+    
+      - name: Upload gerbers and drill file
+        uses: actions/upload-artifact@v7
+        with:
+          name: Gerbers
+          path: ./gerbers
+    
+      - name: Upload image render
+        uses: actions/upload-artifact@v7
+        with:
+          path: ./pcb.png
+          archive: false
